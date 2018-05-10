@@ -1,0 +1,3 @@
+/home/mlzboy/BaiduPCS-master/build/CMakeFiles/edit_cache.dir
+/home/mlzboy/BaiduPCS-master/build/CMakeFiles/rebuild_cache.dir
+/home/mlzboy/BaiduPCS-master/build/CMakeFiles/BaiduPCs.dir
