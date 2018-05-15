@@ -4,7 +4,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 INCLUDE_DIRECTORIES(./src)
 
-INCLUDE_DIRECTORIES("/usr/include/curl")
+#INCLUDE_DIRECTORIES("/usr/include/curl")
 #INCLUDE_DIRECTORIES(./src/gen-cpp)
 AUX_SOURCE_DIRECTORY(./src/rb_tree DIR_SRCS)
 AUX_SOURCE_DIRECTORY(./src/pcs DIR_SRCS)
@@ -29,11 +29,17 @@ ELSE (CMAKE_BUILD_TYPE STREQUAL "Release")
 ENDIF (CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 SET(LIBRARIES 
-/usr/lib/x86_64-linux-gnu/libcurl.so
-/usr/lib/x86_64-linux-gnu/libssl.so
-/usr/lib/x86_64-linux-gnu/libcrypto.so
-/usr/lib/x86_64-linux-gnu/libpthread.so
-/usr/lib/x86_64-linux-gnu/libm.so
+#/home/mlzboy//home/mlzboy/curl-7.54.0/build/lib/libcurl.a
+/home/mlzboy/BaiduPCs-cmake/lib/libcurl.so
+/home/mlzboy/BaiduPCs-cmake/lib/libssl.so
+/home/mlzboy/BaiduPCs-cmake/lib/libm.so.0
+/home/mlzboy/BaiduPCs-cmake/lib/libpthread.so.0
+/home/mlzboy/BaiduPCs-cmake/lib/libcrypto.so
+#/usr/lib/x86_64-linux-gnu/libcurl.so
+#/usr/lib/x86_64-linux-gnu/libssl.so
+#/usr/lib/x86_64-linux-gnu/libcrypto.so
+#/usr/lib/x86_64-linux-gnu/libpthread.so
+#/usr/lib/x86_64-linux-gnu/libm.so
 #/home/maolingzhi/opt/lib/libthrift.a
 #/usr/local/lib/libthrift.a
 #/usr/local/lib/json/libjson_linux-gcc-4.1.2_libmt.a
