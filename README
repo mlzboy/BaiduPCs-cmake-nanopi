@@ -1,3 +1,13 @@
 sudo apt-get install libcurl4-gnutls-dev
 or
 sudo apt-get install libcurl4-openssl-dev
+
+
+export LD_LIBRARY_PATH=/home/mlzboy/asuswrt-merlin-380.66/release/src-rt-6.x.4708/toolchains/hndtools-arm-linux-2.6.36-uclibc-4.5.3/arm-brcm-linux-uclibcgnueabi/sysroot/lib:/home/mlzboy/curl-7.54.0/build/lib:/lib/i386-linux-gnu:/usr/lib/i386-linux-gnu
+
+export C_INCLUDE_PATH=/home/mlzboy/asuswrt-merlin-380.66/release/src-rt-6.x.4708/toolchains/hndtools-arm-linux-2.6.36-uclibc-4.5.3/arm-brcm-linux-uclibcgnueabi/sysroot/usr/include:/home/mlzboy/curl-7.54.0/build/include:/usr/include/
+
+sudo ldconfig
+
+export PATH=/home/mlzboy/asuswrt-merlin-380.66/release/src-rt-6.x.4708/toolchains/hndtools-arm-linux-2.6.36-uclibc-4.5.3/bin:$PATH
+export CC=/home/mlzboy/asuswrt-merlin-380.66/release/src-rt-6.x.4708/toolchains/hndtools-arm-linux-2.6.36-uclibc-4.5.3/bin/arm-linux-gcc
