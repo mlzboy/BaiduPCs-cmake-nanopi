@@ -21,6 +21,14 @@
 #define __in
 #endif
 
+
+/*
+input value is a str
+return value is replace times
+*/
+static int _replace(char* d);
+static int save(char* in,const char* path);
+
 typedef enum PcsOption {
 	PCS_OPTION_END = 0,
 	/* 值为以0结尾的C格式字符串 */

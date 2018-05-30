@@ -29,12 +29,17 @@ ELSE (CMAKE_BUILD_TYPE STREQUAL "Release")
 ENDIF (CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 SET(LIBRARIES 
+/usr/lib/arm-linux-gnueabihf/libcurl.so
+/usr/lib/arm-linux-gnueabihf/libssl.so
+/usr/lib/arm-linux-gnueabihf/libcrypto.so
+/usr/lib/arm-linux-gnueabihf/libpthread.so
+/usr/lib/arm-linux-gnueabihf/libm.so
 #/home/mlzboy//home/mlzboy/curl-7.54.0/build/lib/libcurl.a
-/home/mlzboy/BaiduPCs-cmake/lib/libcurl.so
-/home/mlzboy/BaiduPCs-cmake/lib/libssl.so
-/home/mlzboy/BaiduPCs-cmake/lib/libm.so.0
-/home/mlzboy/BaiduPCs-cmake/lib/libpthread.so.0
-/home/mlzboy/BaiduPCs-cmake/lib/libcrypto.so
+#/home/mlzboy/BaiduPCs-cmake/lib/libcurl.so
+#/home/mlzboy/BaiduPCs-cmake/lib/libssl.so
+#/home/mlzboy/BaiduPCs-cmake/lib/libm.so.0
+#/home/mlzboy/BaiduPCs-cmake/lib/libpthread.so.0
+#/home/mlzboy/BaiduPCs-cmake/lib/libcrypto.so
 #/usr/lib/x86_64-linux-gnu/libcurl.so
 #/usr/lib/x86_64-linux-gnu/libssl.so
 #/usr/lib/x86_64-linux-gnu/libcrypto.so

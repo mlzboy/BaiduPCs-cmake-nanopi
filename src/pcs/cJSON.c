@@ -324,6 +324,7 @@ char *cJSON_PrintUnformatted(cJSON *item)	{return print_value(item,0,0);}
 /* Parser core - when encountering text, process appropriately. */
 static const char *parse_value(cJSON *item,const char *value)
 {
+	printf("=====>%s\n",value);
 	if (!value)						return 0;	/* Fail on null. */
 	//if (!strncmp(value,"/*",2) || !strncmp(value,"//",2))	{ return parse_value(item, skip(skip_comments(value))); }
 	if (!strncmp(value,"null",4))	{ item->type=cJSON_NULL;  return value+4; }

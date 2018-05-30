@@ -1225,6 +1225,7 @@ static PcsBool verifycode(unsigned char *ptr, size_t size, char *captcha, size_t
 	}
 #else
 	std_string(captcha, captchaSize);
+	printf("verifycode:captcha:%s\n",captcha);
 #endif
 	return PcsTrue;
 }

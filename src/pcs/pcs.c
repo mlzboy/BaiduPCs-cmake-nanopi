@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
+//mlzboy added at 2018-05-30
+#include <errno.h>
 #ifdef WIN32
 # include <malloc.h>
 # include "openssl_md5.h"
@@ -98,6 +100,50 @@ const char *get_download_errmsg_by_errno(int error);
 const char *get_buy_errmsg_by_errno(int error);
 const char *get_record_errmsg_by_errno(int error);
 
+//mlzboy added at 2018-05-30
+
+static int save(char* in,const char* path)
+{
+	char* filepath = "./_html.txt";
+	if (path == NULL)
+	{
+		path = filepath;
+	}
+	FILE* fp = NULL;
+	fp = fopen(path,"w");
+	if (fp == NULL)
+	{
+	//	printf("%s\n",strerror(errno));
+		printf("couldn't open the file\n");
+		return 0;
+	}
+	fprintf(fp,"%s",in);
+	fclose(fp);
+	return 1;
+}
+
+static int _replace(char* d)
+{
+	//查找匹配串，并将其替换
+	char* str  = "'152******00' || ''";
+	char* str2 = "'152******00'";
+	char* str3 = " || ''";
+	char* r = strstr(d,str);
+	int count = 0;
+	while(r != NULL)
+	{
+		count += 1;
+		printf("count:%d\n",count);
+		char* dest = r + strlen(str2);
+		char* src = dest +strlen(str3);
+		strcpy(dest,src);
+		printf("d============\n");
+		printf("%s\n",d);
+		r = strstr(d,str);
+	}
+	return count;
+}
+
 PCS_API void pcs_clear_errmsg(Pcs handle)
 {
 	struct pcs *pcs = (struct pcs *)handle;
@@ -171,12 +217,14 @@ PCS_API void pcs_cat_serrmsg(Pcs handle, const char *errmsg)
 /*调用用户注册的验证码函数来让用户识别验证码图片，并让用户输入识别结果*/
 PcsRes pcs_get_captcha(Pcs handle, const char *code_string, char *captcha, int captchaSize)
 {
+	printf("pcs_get_captcha start ...\n");
 	struct pcs *pcs = (struct pcs *)handle;
 	char *url, *img;
 	size_t imgsz;
 
     memset(captcha, 0, captchaSize);
 	if (!pcs->captcha_func) {
+		printf("!pcs->captcha_func\n");
 		pcs_set_errmsg(handle, "No captch function, please regist the function by call pcs_setopt(handle, PCS_OPTION_CAPTCHA_FUNCTION, pFun).");
 		return PCS_NO_CAPTCHA_FUNC;
 	}
@@ -193,6 +241,7 @@ PcsRes pcs_get_captcha(Pcs handle, const char *code_string, char *captcha, int c
 		return PCS_GET_CAPTCHA_FAIL;
 	}
 	pcs_free(url);
+	printf("pcs_get_captcha  PCS_OK\n");
 	return PCS_OK;
 }
 
@@ -1642,15 +1691,17 @@ static PcsRes pcs_dologin(__in Pcs handle,
 	if (code_string && strlen(code_string)) {
 		res = pcs_get_captcha(pcs, code_string, captch, sizeof(captch));
 		if (res != PCS_OK) {
+			printf("1694:res != PCS_OK\n");
 			pcs_set_errmsg(handle, "canceled");
 			return res;
 		}
 	}
-
+	printf("pcs_dologin 1\n");
 	if (passport_build_dv(&dv, starttime, pcs->username)) {
 		pcs_set_errmsg(handle, "Can't build 'dv'.");
 		return PCS_BUILD_POST_DATA;
 	}
+	printf("pcs_dologin 2\n");
 
 	post_data = pcs_http_build_post_data(pcs->http,
 		"staticpage", "http://pan.baidu.com/res/static/thirdparty/pass_v3_jump.html",
@@ -1686,9 +1737,12 @@ static PcsRes pcs_dologin(__in Pcs handle,
 		pcs_set_errmsg(handle, "Can't build the post data.");
 		return PCS_BUILD_POST_DATA;
 	}
+	printf("pcs_dologin 3\n");
 	html = pcs_http_post(pcs->http, URL_PASSPORT_API "login", post_data, PcsTrue);
 	pcs_free(post_data);
 	if (!html) {
+		printf("pcs_dologin 3.1\n");
+		
 		errmsg = pcs_http_strerror(pcs->http);
 		if (errmsg)
 			pcs_set_serrmsg(handle, errmsg);
@@ -1697,6 +1751,7 @@ static PcsRes pcs_dologin(__in Pcs handle,
 		return PCS_NETWORK_ERROR;
 	}
 	else {
+		printf("pcs_dologin 3.2\n");
 		char *jump_url,
 			*errorStr = pcs_get_embed_query_int_value_by_key(html, "&error");
 		if (!errorStr) errorStr = pcs_get_embed_query_int_value_by_key(html, "err_no");
@@ -1706,21 +1761,30 @@ static PcsRes pcs_dologin(__in Pcs handle,
 		}
 		*errorno = atoi(errorStr);
 		pcs_free(errorStr);
+		printf("pcs_dologin 3.21\n");
 
 		if (out_html != NULL)
+		{
 			*out_html = pcs_utils_strdup(html);
-
+			printf("pcs_dologin 3.22\n");
+		
+		}
 		/* TODO: 应该不需要叫一次 jump_url 的，待验证？ */
 		jump_url = pcs_get_pass_v3_jump_url(handle, html);
 		html = pcs_http_get(pcs->http, jump_url, PcsTrue);
 		pcs_free(jump_url);
+		printf("pcs_dologin 3.23\n");
 		if (pcs_http_code(pcs->http) != 200) {
+			printf("pcs_dologin 3.24\n");
 			pcs_set_errmsg(handle, "GET '%s' failed.", jump_url);
 			return PCS_NETWORK_ERROR;
 		}
 
+		printf("pcs_dologin 3.25\n");
 		return PCS_OK;
 	}
+	printf("pcs_dologin 4\n");
+	
 }
 
 static PcsRes pcs_call_authwidgetverify(__in Pcs handle,
@@ -1748,6 +1812,26 @@ static PcsRes pcs_call_authwidgetverify(__in Pcs handle,
 		else
 			pcs_set_errmsg(handle, "Can't get response from the remote server.");
 		return PCS_NETWORK_ERROR;
+	}
+	
+	printf("===>%s\n",html);
+	if(save(html,"/home/pi/BaiduPCs-cmake/Debug/html.txt"))
+	{
+		printf("%s",html);
+		printf("%s\n","write html file success!");
+	}
+	else
+	{
+		printf("%s\n",strerror(errno));
+		printf("%s\n","write html file failed!");
+	}
+	return 1;
+	int ret = _replace(html);
+	if (ret > 0)
+	{
+		printf("replace result-----------------------------\n");
+		printf("%s\n",html);
+		printf("replace times:%d\n",ret);
 	}
 
 	json = cJSON_Parse(extract_json_from_callback(html));
@@ -2025,8 +2109,9 @@ PCS_API PcsRes pcs_login(Pcs handle)
 	char *token = NULL, *code_string = NULL;
 	int error = -1, retry_times;
 	int64_t starttime;
-
+	printf("------------------pcs_prelogin start...\n");
 	res = pcs_prelogin(handle, &token, &code_string);
+	printf("------------------pcs_prelogin end...\n");
 	if (res != PCS_OK) {
 		pcs_free(token);
 		pcs_free(code_string);
@@ -2038,11 +2123,13 @@ PCS_API PcsRes pcs_login(Pcs handle)
 	retry_times = 0;
 
 try_login:
-	
+	printf("------------------try_login start...\n");
 	pcs_free(html);
 	html = NULL;
 	res = pcs_dologin(handle, starttime, code_string, token, &error, &html);
+	printf("------------------pcs_dologin end...\n");
 	if (res != PCS_OK) {
+		printf("res != PCS_OK\n");
 		pcs_free(token);
 		pcs_free(code_string);
 		pcs_free(html);

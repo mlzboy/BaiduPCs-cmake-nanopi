@@ -1,1 +1,3 @@
-/home/mlzboy/BaiduPCs-cmake/build/CMakeFiles/BaiduPCs.dir
+/home/pi/BaiduPCs-cmake/build/CMakeFiles/edit_cache.dir
+/home/pi/BaiduPCs-cmake/build/CMakeFiles/rebuild_cache.dir
+/home/pi/BaiduPCs-cmake/build/CMakeFiles/BaiduPCs.dir
